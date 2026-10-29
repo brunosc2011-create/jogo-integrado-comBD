@@ -8,6 +8,7 @@ Toda função recebe a conexão (conn) como primeiro parâmetro.
 """
 
 
+
 def incluir(conn, nome):
     """Insere uma classe e devolve o id que o banco gerou para ela."""
     cursor = conn.execute("INSERT INTO classes (nome) VALUES (?)", (nome,))

@@ -20,27 +20,35 @@ CONSULTA = """
            jogadores.apelido, classes.nome
     FROM personagens
     JOIN jogadores ON jogadores.id = personagens.jogador_id
+    JOIN classes ON classes.id = personagens.classe_id
 """
+
 # TODO: acrescente acima a linha
 #       JOIN classes ON classes.id = personagens.classe_id
 
 
 def incluir(conn, nome, nivel, jogador_id, classe_id):
     """Insere um personagem e devolve o id gerado."""
-    # TODO
-    raise NotImplementedError
+    cursor = conn.execute("INSERT INTO personagens (nome, nivel, jogador_id, classe_id) VALUES (?, ?)"(nome, nivel,jogador_id,classe_id,))
+    conn.commit()
+    return cursor.lastrwoid
+    
 
 
 def buscar_por_id(conn, id):
     """Devolve UMA linha, ou None.
     Dica: conn.execute(CONSULTA + " WHERE personagens.id = ?", (id,))"""
-    # TODO
-    raise NotImplementedError
+    cursor = conn.execute("SELECT id FROM personagens where personagens.id = ?", (id,))
+    return cursor.fetchone()
 
 
 def buscar_por_nome(conn, nome):
     """Devolve uma LISTA com os personagens cujo nome contém o texto."""
     # TODO: cuidado, aqui é personagens.nome (classes também tem coluna nome)
+    cursor = conn.execute(
+        "SELECT p.id, p.nome, c.nome as classe FROM personagens p, classes c WHERE p.nome LIKE ? AND p.class_id = c.id ORDER BY p.nome",
+        ("%" + nome + "%",))
+    return cursor.fetchall()
     raise NotImplementedError
 
 
